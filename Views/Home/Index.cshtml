@@ -2,7 +2,74 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+<div class="row" align="center">
+    <h2>Belfast Weather Forecast App</h2>
 </div>
+
+<div class="row" align="center">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h2>Login to View the 5 day forecast of the weather in Belfast!</h2>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <button class="btn-default btn-lg" id="getWeather">Refresh Weather</button>
+            <div>            
+                <img src="images/LoadingBar.gif" id="loader" height="200" style="display: none"/>
+            </div>
+            <ul id="weatherList" class="list-group"></ul>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        function formatDate(date) {
+            return (date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear());
+        }
+
+        function DisplayFiveDayWeatherForecast() {
+            $("#loader").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetFiveDayForecast", "Weather")',
+                success: function (weatherResult) {
+                    for (var i = 0; i < weatherResult.weatherRecords.length; i++) {
+                        let count = i;
+                        let weatherObject = weatherResult.weatherRecords[count];
+                        let weatherObjectDate = new Date(weatherObject.date);
+
+
+                        $("#weatherList").append(function() {
+                            return "<li class='list-group-item'>" +
+                                "<h2>" + formatDate(weatherObjectDate) + "</h2>" +
+                                "<p style='font-weight:bold' display='block'>"
+                                    + weatherObject.weatherState + " "
+                                + "</p>" +
+                                "<img src='https://www.metaweather.com/static/img/weather/png/"
+                                    + weatherObject.weatherStateIcon + ".png' width='50' height='50'>" +
+                                "</li>";
+                        });
+                    }
+                },
+                complete: function() {
+                    $("#loader").hide();
+                }
+            });
+        };
+
+        $(document).ready(function() {
+
+            DisplayFiveDayWeatherForecast();
+
+            $("#getWeather").click(function () {
+                $("#weatherList").empty();
+                DisplayFiveDayWeatherForecast();
+            });
+        });
+    </script>
+}

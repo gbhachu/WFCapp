@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WFCapp.Models
 {
-    public class API
+    public class Api
     {
         public const string MetaWeatherApiFindCityUrl = "https://www.metaweather.com/api/location/search/?query=";
         public const string MetaWeatherApiFindWoeIdUrl = "https://www.metaweather.com/api/location/";

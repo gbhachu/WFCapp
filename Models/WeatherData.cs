@@ -1,46 +1,39 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using WFCapp.Interfaces;
 
 namespace WFCapp.Models
 {
-    public class WeatherData : IWeatherDataFactory
+    public class WeatherData : IWeatherFactory
     {
         public DateTime? Date { get; set; }
         public string WeatherState { get; set; }
         public string WeatherStateIcon { get; set; }
 
-        public string City => "Belfast";
-
-        public object Api { get; private set; }
-
-        public JObject GetCityWeatherData(string city)
+        public JObject GetWeather(string city)
         {
             using var webClient = new WebClient();
             try
             {
                 var metaWeatherCityDetails =
-                    webClient.DownloadData($"{API.MetaWeatherApiFindCityUrl}{City}");
+                    webClient.DownloadData($"{Api.MetaWeatherApiFindCityUrl}{city}");
 
                 var cityDetails = JArray.Parse(Encoding.ASCII.GetString(metaWeatherCityDetails));
 
                 var metaWeatherCityWoeId = cityDetails[0]["woeid"].ToString();
 
                 var downloadedCityWeatherData =
-                    webClient.DownloadData($"{API.MetaWeatherApiFindWoeIdUrl}{metaWeatherCityWoeId}");
+                    webClient.DownloadData($"{Api.MetaWeatherApiFindWoeIdUrl}{metaWeatherCityWoeId}");
 
                 return JObject.Parse(Encoding.ASCII.GetString(downloadedCityWeatherData));
             }
             catch (Exception ex)
             {
-                throw new Exception($"MetaWeather did not return any results for {City} : {ex.Message} ");
+                throw new Exception($"Api call did not return data {city} : {ex.Message} ");
             }
         }
 
-    
-}
+    }
 }
