@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "@wecode/pulltorefreshjs@1.0.0",
+      "destination": "wwwroot/lib/wecode/pulltorefreshjs/",
+      "files": [
+        "dist/pulltorefresh.js",
+        "dist/pulltorefresh.min.js",
+        "dist/pulltorefreshjs.cjs.js",
+        "dist/pulltorefreshjs.cjs.min.js",
+        "dist/pulltorefreshjs.es.js",
+        "dist/pulltorefreshjs.es.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "pulltorefreshjs@0.1.22",
+      "destination": "wwwroot/lib/pulltorefreshjs/",
+      "files": [
+        "dist/index.esm.js",
+        "dist/index.js",
+        "dist/index.umd.js",
+        "dist/index.umd.min.js",
+        "LICENSE.txt",
+        "package.json",
+        "README.md"
+      ]
+    }
+  ]
+}
